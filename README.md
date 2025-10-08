@@ -64,3 +64,5 @@ Depois das otimizações a aplicação melhorou:
 - Cálculos pesados foram memoizados, melhorando a performance.
 - Código mais limpo e fácil de manter, com estado centralizado.
   ![alt text](docs/performance-after.png)
+
+Projeto no GitHub: [performance-lab](https://github.com/Kainanars/devweb-performance-lab5.git)
