@@ -52,7 +52,7 @@ Antes das otimizações, a aplicação apresentava os seguintes problemas:
 - Re-renders excessivos em componentes que não precisavam ser atualizados.
 - Cálculos pesados realizados em cada renderização, afetando a responsividade.
 - Prop drilling complicado, tornando o código difícil de entender e manter.
-  ![alt text](docs\performance-before.png)
+  ![alt text](docs/performance-before.png)
 
 Escolhi o **Caminho B (Context Avançado)** para a refatoração de estado. Optei por usar Context + useReducer em vez de Redux para manter a solução mais leve, simples e integrada ao React, sem muitas dependências externas.
 
@@ -63,4 +63,4 @@ Depois das otimizações a aplicação melhorou:
 - Redução drástica nos re-renders, com componentes atualizando apenas quando necessário.
 - Cálculos pesados foram memoizados, melhorando a performance.
 - Código mais limpo e fácil de manter, com estado centralizado.
-  ![alt text](docs\performance-after.png)
+  ![alt text](docs/performance-after.png)
