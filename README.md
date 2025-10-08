@@ -1,62 +1,66 @@
-# Performance Lab - React Optimization
+# Performance & State Management Refactor Report Lab 5
 
-Este proyecto contiene una aplicación React con problemas de rendimiento intencionales para practicar optimización.
+## Contexto
 
-## Problemas de Rendimiento Incluidos:
+A aplicação original usava múltiplos useState e sofria com **prop drilling** (é quando as props são passadas por vários níveis).
+Além disso, havia re-renderizações e cálculos desnecessários em vários componentes, afetando o desempenho geral.
 
-### 1. Re-renderizados Innecesarios:
-- **Header**: Realiza cálculos costosos en cada render
-- **SearchBar**: Se re-renderiza cuando cambia el theme (no lo usa)
-- **CategoryFilter**: Se re-renderiza cuando cambia el theme (no lo usa)
-- **ProductCard**: Realiza cálculos complejos en cada render
-- **CartItem**: Recibe props que no usa (user, theme)
-- **UserProfile**: Calcula estadísticas costosas en cada render
+---
 
-### 2. Prop Drilling:
-- Todas las props se pasan desde App hacia abajo
-- No hay gestión de estado global
-- Los componentes reciben props innecesarias
+## Problemas Encontrados
 
-### 3. Cálculos Costosos:
-- Operaciones matemáticas innecesarias en loops
-- Filtrado de productos sin memoización
-- Cálculos de totales repetitivos
+- `CartItem` era re-renderizado quando o **tema** ou **usuário** mudavam, mesmo sem alterar o item.
+- `Cart` recalculava o total a cada render.
+- `Header` executava uma função pesada em toda renderização.
+- Componentes de filtro e busca atualizavam sem necessidade.
 
-## Instrucciones del Lab:
+---
 
-### Parte 1: Perfilado y Optimización
-1. Instala React DevTools
-2. Usa el Profiler para identificar componentes que se re-renderizan innecesariamente
-3. Aplica `memo`, `useMemo`, o `useCallback` según corresponda
-4. Documenta con capturas "antes y después"
+## Soluções Aplicadas
 
-### Parte 2: Gestión de Estado Global
-Elige uno de estos caminos:
+### Estado Global (Context + useReducer)
 
-**Camino A (Redux Toolkit):**
-- Implementa Redux Toolkit
-- Crea slices para productos, carrito, usuario
-- Conecta componentes con useSelector/useDispatch
+- Implementei o **Context** com **useReducer** para centralizar o estado.
+- Criei um hook `useAppContext()` para facilitar o acesso.
+- Eliminei praticamente todo o o prop drilling.
 
-**Camino B (Context + useReducer):**
-- Implementa Context con useReducer
-- Define tipos de acción y reducer
-- Elimina prop drilling
+### Otimizações aplicadas
 
-## Instalación:
+- `React.memo` em todos os componentes para evitar re-renders desnecessários.
+- `useMemo` para cálculos pesados (como total do carrinho, filtragens e estatísticas do usuário).
+- `useCallback` para funções de eventos e dispatch.
 
-```bash
-npm install
-npm start
-```
+Exemplo de ação no reducer:
 
-## Componentes a Optimizar:
+## ![alt text](docs/image.png)
 
-1. **Header** - Cálculos costosos
-2. **ProductList** - Filtrado sin memoización  
-3. **ProductCard** - Operaciones innecesarias
-4. **Cart** - Cálculo de total costoso
-5. **UserProfile** - Estadísticas complejas
-6. **SearchBar/CategoryFilter** - Re-renders innecesarios
+## Benefícios Gerais
 
-¡Buena suerte optimizando!
+- Interface mais rápida e responsiva
+- Código limpo e modular
+- Estado previsível e fácil de debugar
+- Escalável para novas features
+
+---
+
+## Teste das Otimizações
+
+### Problemas de performance antes das otimizações
+
+Antes das otimizações, a aplicação apresentava os seguintes problemas:
+
+- Re-renders excessivos em componentes que não precisavam ser atualizados.
+- Cálculos pesados realizados em cada renderização, afetando a responsividade.
+- Prop drilling complicado, tornando o código difícil de entender e manter.
+  ![alt text](docs\performance-before.png)
+
+Escolhi o **Caminho B (Context Avançado)** para a refatoração de estado. Optei por usar Context + useReducer em vez de Redux para manter a solução mais leve, simples e integrada ao React, sem muitas dependências externas.
+
+### Depois das otimizações
+
+Depois das otimizações a aplicação melhorou:
+
+- Redução drástica nos re-renders, com componentes atualizando apenas quando necessário.
+- Cálculos pesados foram memoizados, melhorando a performance.
+- Código mais limpo e fácil de manter, com estado centralizado.
+  ![alt text](docs\performance-after.png)
